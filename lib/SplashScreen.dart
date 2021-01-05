@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'MainPage.dart';
+import 'Supplier/MainPage.dart' as sup;
 import 'theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -107,6 +108,8 @@ class _SplashScreen extends State<SplashScreen>{
                       duration: Duration(milliseconds: 1000),
                       child: FlatButton(
                         onPressed: () async {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          (prefs.getString("supplier")!=null)?Navigator.push(context,MaterialPageRoute(builder: (context)=>sup.MainPage())):
                           Navigator.push(context,MaterialPageRoute(builder: (context)=>supplier.Login()));
                         },
                         color: orange,
@@ -125,6 +128,8 @@ class _SplashScreen extends State<SplashScreen>{
                     duration: Duration(milliseconds: 1000),
                     child: FlatButton(
                       onPressed: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        (prefs.getString("customer")!=null)?Navigator.push(context,MaterialPageRoute(builder: (context)=>MainPage())):
                         Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
                       },
                       color: blue,

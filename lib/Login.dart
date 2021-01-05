@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'IntroScreen.dart';
 import 'SignUp.dart';
+//In the prototype we are keeping the login function open incase the organization is unable to set up truffle other functionality can be tested
 class Login extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {

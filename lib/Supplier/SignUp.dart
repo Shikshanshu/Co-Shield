@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/web3dart.dart';
 
 import 'IntroScreen.dart';
 import '../theme.dart';
@@ -15,7 +18,7 @@ class SignUp extends StatefulWidget{
   }
 
 }
-
+bool loading = false;
 class _SignUp extends State<SignUp>{
   final key = GlobalKey<FormState>();
   TextEditingController vaccine = new TextEditingController();
@@ -23,10 +26,53 @@ class _SignUp extends State<SignUp>{
   TextEditingController location = new TextEditingController();
   TextEditingController contact = new TextEditingController();
   TextEditingController verification = new TextEditingController();
+  Client httpClient;
+  Web3Client ethClient;
+  Future<DeployedContract> loadContract() async {
+    String abiCode = await rootBundle.loadString("Assets/abi1.json");
+    String contractAddress = "0xFF7D83835f630a1D32F5fa1fAE9B7488bEbc85E9";
+
+    final contract = DeployedContract(ContractAbi.fromJson(abiCode, "DistributorData"),
+        EthereumAddress.fromHex(contractAddress));
+    return contract;
+  }
+
+  Future<String> submit(String functionName, List<dynamic> args) async {
+    EthPrivateKey credentials = EthPrivateKey.fromHex(
+        "148f42ce24eca534b979181506a9e31bd84a7935f714f736a5f6edb11769733e");
+
+    DeployedContract contract = await loadContract();
+
+    final ethFunction = contract.function(functionName);
+
+    var result = await ethClient.sendTransaction(
+      credentials,
+      Transaction.callContract(
+        contract: contract,
+        function: ethFunction,
+        parameters: args,
+        maxGas: 1000000,
+      ),
+    );
+    return result;
+  }
+  Future<String> sendCoind() async {
+    var response = await submit("AddDistributor", [BigInt.parse(verification.text),name.text,vaccine.text]);
+    return response;
+  }
+  @override
+  void initState() {
+    super.initState();
+    loading = false;
+    httpClient = new Client();
+    ethClient = new Web3Client("http://127.0.0.1:7545", httpClient);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: (loading==true)?Center(
+        child: CircularProgressIndicator(),
+      ):SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
@@ -197,8 +243,27 @@ class _SignUp extends State<SignUp>{
               ),
               onPressed: () async {
                 if(key.currentState.validate()) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => IntroScreen()));
+                  setState(() {
+                    loading = true;
+                  });
+                  String response = await sendCoind();
+                  if(response!="error")
+                  {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setString("supplier", verification.text);
+                    setState(() {
+                      loading = false;
+                    });
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => IntroScreen()));
+                  }
+                  else
+                  {
+                    setState(() {
+                      loading = false;
+                    });
+                    Fluttertoast.showToast(msg: "Error connecting to backend");
+                  }
                 }
               },
               child: Padding(

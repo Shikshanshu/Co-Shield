@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'IntroScreen.dart';
 import '../theme.dart';
 import 'SignUp.dart';
+//In the prototype we are keeping the login function open incase the organization is unable to set up truffle other functionality can be tested
 class Login extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {

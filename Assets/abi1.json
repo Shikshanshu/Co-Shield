@@ -1,0 +1,113 @@
+[
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "distCount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x4d3fdae9"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "distributors",
+    "outputs": [
+      {
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "vaccineName",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x50b492ba"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor",
+    "signature": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "vaccineName",
+        "type": "string"
+      }
+    ],
+    "name": "DistributorAdded",
+    "type": "event",
+    "signature": "0x52f38163de1016eaf3a56c5ae2ef14c89bc0e0214c215f70c36b749d295ef222"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getStatus",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x4e69d560"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      },
+      {
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "name": "_vaccineName",
+        "type": "string"
+      }
+    ],
+    "name": "AddDistributor",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x2816017d"
+  }
+]
