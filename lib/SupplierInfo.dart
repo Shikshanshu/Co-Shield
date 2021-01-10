@@ -6,9 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SupplierInfo extends StatefulWidget{
+  dynamic data;
+  SupplierInfo(this.data);
   @override
   State<StatefulWidget> createState() {
-    return _SupplierInfo();
+    return _SupplierInfo(data);
   }
 }
 String company = "Sun Pharmaceuticals";
@@ -29,8 +31,17 @@ var customerData = {
 class _SupplierInfo extends State<SupplierInfo>{
   List<BarChartModel> data = new List();
   List<Series<BarChartModel, String>> series = new List();
+  dynamic distributor;
+  _SupplierInfo(this.distributor);
   @override
   void initState() {
+    companyData = {
+      "location": "New Delhi, Delhi",
+      "government id": distributor['id'],
+      "contact": '9876543210',
+      "vaccine": distributor['vaccine'],
+    };
+    company = distributor['name'];
     data.add(BarChartModel("delivery",customerData["delivery"],Colors.red));
     data.add(BarChartModel("customer support",customerData["customer support"],Colors.orange));
     data.add(BarChartModel("service",customerData["service"],Colors.amber));

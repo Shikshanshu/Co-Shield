@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:blockchain/SupplierFeedback.dart';
 import 'package:blockchain/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class VaccineVerifier extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -15,21 +18,76 @@ bool verified;
 bool display;
 var data;
 class _VaccineVerifier extends State<VaccineVerifier>{
-  void getDatafromBackend() {
-    setState(() {
-      loading = false;
-      verified = true;
-      data = {
-        "company": "Sun Pharmaceuticals",
-        "date": "26th January 2021",
-        "at": "New Delhi, Delhi, India",
-      };
-    });
-    Future.delayed(Duration(milliseconds: 100),(){
-      setState(() {
-        display = true;
-      });
-    });
+  Future<void> getDatafromBackend() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool('guest')==true)
+      {
+        setState(() {
+          verified = true;
+        });
+        data = {
+          'date': '26 January 2021',
+          'at': 'New Delhi',
+          'company': "Sun Pharmaceuticals",
+          'vaccine': "Phyzer",
+          'transporter': "LnT"
+        };
+        setState(() {
+          loading = false;
+        });
+        Future.delayed(Duration(milliseconds: 100),(){
+          setState(() {
+            display = true;
+          });
+        });
+      }
+    else
+      {
+        print(prefs.getString('customer'));
+        http.Response response = await http.post("http://127.0.0.1:8545/getconsumer",body: {
+          "aId": prefs.getString('customer'),
+          "password": prefs.getString('password')
+        });
+        var json = jsonDecode(response.body);
+        if(json['success']=="0")
+        {
+          setState(() {
+            loading = false;
+          });
+          Fluttertoast.showToast(msg: "Sorry! Data could not be found.");
+          Navigator.pop(context);
+        }
+        else
+        {
+          print(response.body);
+          setState(() {
+            verified = json['vaccinated'];
+          });
+          if(verified==true)
+            {
+              response = await http.post("http://127.0.0.1:8545/getvaccine",body: {
+                "id": json["vacId"]
+              });
+              json = jsonDecode(response.body);
+              data = {
+                'date': '26 January 2021',
+                'at': 'New Delhi',
+                'company': json['distributorName'],
+                'vaccine': json['vaccineName'],
+                'transporter': json['transporter']
+              };
+            }
+          setState(() {
+            loading = false;
+          });
+          Future.delayed(Duration(milliseconds: 100),(){
+            setState(() {
+              display = true;
+            });
+          });
+        }
+      }
+
   }
   @override
   void initState() {
@@ -102,6 +160,20 @@ class _VaccineVerifier extends State<VaccineVerifier>{
                       ),
                       TextSpan(
                         text: data["company"],
+                          style: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green)
+                      ),
+                      TextSpan(
+                        text: ". The vaccine was transported by ",
+                      ),
+                      TextSpan(
+                          text: data["transporter"],
+                          style: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green)
+                      ),
+                      TextSpan(
+                        text: " which is a leading transporter of vaccine ",
+                      ),
+                      TextSpan(
+                          text: data["vaccine"],
                           style: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.green)
                       ),
                     ]

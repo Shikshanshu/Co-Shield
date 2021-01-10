@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,26 +7,60 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 import 'IntroScreen.dart';
 import 'SignUp.dart';
-//In the prototype we are keeping the login function open incase the organization is unable to set up truffle other functionality can be tested
+
 class Login extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     return _Login();
   }
-
 }
-
+bool loading = false;
 class _Login extends State<Login>{
   final key = GlobalKey<FormState>();
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
+  TextEditingController aadhar = new TextEditingController();
+  Future<void> getCostumer() async {
+    http.Response response = await http.post("http://127.0.0.1:8545/getconsumer",body: {
+      "aId": aadhar.text,
+      "password": password.text
+    });
+    var json = jsonDecode(response.body);
+    if(json['success']=="0")
+    {
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(msg: "Account Does not Exist. Please SignUp!");
+    }
+    else
+    {
+      print(response.body);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("customer", aadhar.text);
+      prefs.setString("password", password.text);
+      prefs.setBool("guest", false);
+      setState(() {
+        loading = false;
+      });
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => IntroScreen()));
+    }
+  }
+  @override
+  void initState() {
+    loading = false;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: (loading)?Center(
+        child: CircularProgressIndicator(),
+      ):SingleChildScrollView(
         child: Column(
             children: [
               SizedBox(
@@ -99,6 +135,37 @@ class _Login extends State<Login>{
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
+                      child: TextFormField(
+                        style: subheading,
+                        controller: aadhar,
+                        keyboardType: TextInputType.number,
+                        validator: MinLengthValidator(12,errorText: "Please input correct aadhaar number"),
+                        decoration: InputDecoration(
+                          labelText: 'Aadhaar Number',
+                          hintText: "Please input your 12 digit Aadhaar Number (UID)",
+                          hintStyle: subheading,
+                          labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(color: Colors.grey,width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(color: Colors.grey,width: 2.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(color: Colors.red,width: 2),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(color: Colors.red,width: 2),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -113,7 +180,10 @@ class _Login extends State<Login>{
                 onPressed: () async {
                   if(key.currentState.validate())
                     {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroScreen()));
+                      setState(() {
+                        loading = true;
+                      });
+                      getCostumer();
                     }
                 },
                 child: Padding(
@@ -132,7 +202,21 @@ class _Login extends State<Login>{
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
                 },
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text("Continue as guest?",style: subheading),
+                ),
+                onTap: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('guest', true);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroScreen()));
+                },
+              ),
             ],
         ),
       ),

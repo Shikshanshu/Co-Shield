@@ -65,8 +65,8 @@ buildDrawer(context){
                     children: <Widget>[
                       _buildRow(context,Icons.share, "Share App",1),
                       _buildDivider(),
-                      _buildRow(context,Icons.account_circle, "Edit Profile",2, showBadge: true),
-                      _buildDivider(),
+                      //_buildRow(context,Icons.account_circle, "Edit Profile",2, showBadge: true),
+                      //_buildDivider(),
                       _buildRow(context,Icons.star, "Rate Us",3,showBadge: true),
                       _buildDivider(),
                       _buildRow(context,Icons.info_outline,"Terms and Conditions",4),

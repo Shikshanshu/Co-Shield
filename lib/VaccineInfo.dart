@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:blockchain/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class VaccineInfo extends StatefulWidget{
   Barcode barcode;
   VaccineInfo(this.barcode);
@@ -13,21 +17,49 @@ class VaccineInfo extends StatefulWidget{
   }
 
 }
-
+bool loading = true;
 class _VaccineInfo extends State<VaccineInfo>{
   Barcode barcode;
   String temp;
   String location,time;
   String distributor;
   _VaccineInfo(this.barcode);
-  void setDatafromBackend(){
-    temp = "-70 °C";
-    location = "New Delhi, Delhi";
-    time = "18 minutes";
-    distributor = "Sun Pharmaceuticals";
+  Future<void> setDatafromBackend() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool("guest"))
+      {
+        temp = "-70";
+        location = "New Delhi, Delhi";
+        time = "18 minutes";
+        distributor = "Sun Pharmaceuticals";
+      }
+    else
+      {
+        http.Response response = await http.post("http://127.0.0.1:8545/getvaccine",body: {
+          "id": barcode.code
+        });
+        var json = jsonDecode(response.body);
+        if(json['success']=="0")
+        {
+          setState(() {
+            loading = false;
+          });
+          Fluttertoast.showToast(msg: "Cannot find vaccine with given Id");
+          Navigator.pop(context);
+        }
+        temp = json['temp'];
+        location = "New Delhi, Delhi";
+        time = "18 minutes";
+        distributor = json['distributorName'];
+      }
+
+    setState(() {
+      loading = false;
+    });
   }
   @override
   void initState() {
+    loading = true;
     setDatafromBackend();
     super.initState();
   }
@@ -35,7 +67,9 @@ class _VaccineInfo extends State<VaccineInfo>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(87, 114, 195,1),
-      body: SingleChildScrollView(
+      body: (loading)?Center(
+        child: CircularProgressIndicator(),
+      ):SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(

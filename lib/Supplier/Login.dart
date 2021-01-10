@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'IntroScreen.dart';
 import '../theme.dart';
 import 'SignUp.dart';
-//In the prototype we are keeping the login function open incase the organization is unable to set up truffle other functionality can be tested
 class Login extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -14,10 +17,40 @@ class Login extends StatefulWidget{
   }
 
 }
-
+bool loading = false;
 class _Login extends State<Login>{
   final key = GlobalKey<FormState>();
   TextEditingController government = new TextEditingController();
+  Future<void> getSupplier() async {
+    http.Response response = await http.post("http://127.0.0.1:8545/getdistributor",body: {
+      "id": government.text,
+    });
+    var json = jsonDecode(response.body);
+    if(json['success']=="0")
+    {
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(msg: "Account Does not Exist. Please SignUp!");
+    }
+    else
+    {
+      print(response.body);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("supplier", government.text);
+      prefs.setBool("guest", false);
+      setState(() {
+        loading = false;
+      });
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => IntroScreen()));
+    }
+  }
+  @override
+  void initState() {
+    loading =false;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +112,10 @@ class _Login extends State<Login>{
                 onPressed: () async {
                   if(key.currentState.validate())
                     {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroScreen()));
+                      setState(() {
+                        loading = true;
+                      });
+                      getSupplier();
                     }
                 },
                 child: Padding(
@@ -98,7 +134,21 @@ class _Login extends State<Login>{
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
                 },
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text("Continue as guest?",style: subheading),
+                ),
+                onTap: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('guest', true);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroScreen()));
+                },
+              ),
             ],
         ),
       ),

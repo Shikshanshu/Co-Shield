@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../theme.dart';
 
 class AddVaccine extends StatefulWidget{
@@ -13,16 +16,46 @@ class AddVaccine extends StatefulWidget{
   }
 
 }
-
+bool loading = false;
 class _AddVaccine extends State<AddVaccine>{
   final key = GlobalKey<FormState>();
   TextEditingController vaccineId = new TextEditingController();
   TextEditingController aadhaarId = new TextEditingController();
+  Future<void> addVaccine() async {
+    http.Response response = await http.post("http://127.0.0.1:8545/makevaccinated",body: {
+        'id': vaccineId.text,
+        'aId': aadhaarId.text
+    });
+    var json = jsonDecode(response.body);
+    if(json['success']==0)
+    {
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(msg: "There was some error please check Vaccine and Aadhaar Id");
+    }
+    else
+    {
+      print(response.body);
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(msg: "User data has been successfully updated");
+      Navigator.pop(context);
+    }
+  }
+  @override
+  void initState() {
+    loading = false;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(87, 114, 195,1),
-      body: SingleChildScrollView(
+      body: (loading)?Center(
+        child: CircularProgressIndicator(),
+      ):SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
@@ -114,8 +147,16 @@ class _AddVaccine extends State<AddVaccine>{
               onPressed: () async {
                 if(key.currentState.validate())
                 {
-                  Fluttertoast.showToast(msg: "User data has been successfully updated");
-                  Navigator.pop(context);
+                  setState(() {
+                    loading = true;
+                  });
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  if(prefs.getBool('guest'))
+                    {
+                      Fluttertoast.showToast(msg: "Cannot add Vaccine as guest");
+                    }
+                  else
+                    addVaccine();
                 }
               },
               child: Padding(

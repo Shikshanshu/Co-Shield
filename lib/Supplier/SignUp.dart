@@ -1,12 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web3dart/web3dart.dart';
 
 import 'IntroScreen.dart';
 import '../theme.dart';
@@ -26,7 +26,7 @@ class _SignUp extends State<SignUp>{
   TextEditingController location = new TextEditingController();
   TextEditingController contact = new TextEditingController();
   TextEditingController verification = new TextEditingController();
-  Client httpClient;
+  /*Client httpClient;
   Web3Client ethClient;
   Future<DeployedContract> loadContract() async {
     String abiCode = await rootBundle.loadString("Assets/abi1.json");
@@ -59,13 +59,39 @@ class _SignUp extends State<SignUp>{
   Future<String> sendCoind() async {
     var response = await submit("AddDistributor", [BigInt.parse(verification.text),name.text,vaccine.text]);
     return response;
+  }*/
+  Future<void> addSupplier() async {
+    http.Response response = await http.post("http://127.0.0.1:8545/adddistributor",body: {
+      "id": verification.text,
+      "name": name.text,
+      "vaccineName": vaccine.text
+    });
+    var json = jsonDecode(response.body);
+    if(json['success']=="0")
+    {
+      setState(() {
+        loading = false;
+      });
+      Fluttertoast.showToast(msg: "Account Already Exists. Please Login!");
+    }
+    else
+    {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("supplier", verification.text);
+      prefs.setBool("guest", false);
+      setState(() {
+        loading = false;
+      });
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => IntroScreen()));
+    }
   }
   @override
   void initState() {
     super.initState();
     loading = false;
-    httpClient = new Client();
-    ethClient = new Web3Client("http://127.0.0.1:7545", httpClient);
+    //httpClient = new Client();
+    //ethClient = new Web3Client("http://127.0.0.1:7545", httpClient);
   }
   @override
   Widget build(BuildContext context) {
@@ -246,8 +272,9 @@ class _SignUp extends State<SignUp>{
                   setState(() {
                     loading = true;
                   });
-                  String response = await sendCoind();
-                  if(response!="error")
+                  addSupplier();
+                  //String response = await sendCoind();
+                  /*if(response!="error")
                   {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.setString("supplier", verification.text);
@@ -263,7 +290,7 @@ class _SignUp extends State<SignUp>{
                       loading = false;
                     });
                     Fluttertoast.showToast(msg: "Error connecting to backend");
-                  }
+                  }*/
                 }
               },
               child: Padding(
