@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,6 +90,8 @@ class _SignUp extends State<SignUp>{
             setState(() {
               loading = false;
             });
+            FirebaseAuth auth = FirebaseAuth.instance;
+            await auth.signInAnonymously();
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => IntroScreen()));
       }
@@ -105,210 +108,219 @@ class _SignUp extends State<SignUp>{
     return Scaffold(
       body: (loading)?Center(
         child: CircularProgressIndicator(),
-      ):SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 70,
-            ),
-            Text("SIGNUP",style:  GoogleFonts.aBeeZee(fontSize: 50,fontWeight: FontWeight.w900,color: orange ),),
-            SizedBox(
-              height: 30,
-            ),
-            Form(
-              key: key,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 60),
-                    child: TextFormField(
-                      style: subheading,
-                      controller: name,
-                      validator: MinLengthValidator(1,errorText: "Name cannot be empty"),
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
+      ):Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Image.asset("Assets/signup.png",fit: BoxFit.fill,)
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 70,
+                ),
+                Text("SIGNUP",style: GoogleFonts.aBeeZee(fontSize: 35,fontWeight: FontWeight.bold,color: Colors.white),),
+                SizedBox(
+                  height: 30,
+                ),
+                Form(
+                  key: key,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 60),
+                        child: TextFormField(
+                          style: subheading1,
+                          controller: name,
+                          validator: MinLengthValidator(1,errorText: "Name cannot be empty"),
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
+                        child: TextFormField(
+                          style: subheading1,
+                          controller: age,
+                          validator: RequiredValidator(errorText: "Age is a required field"),
+                          decoration: InputDecoration(
+                            labelText: 'Age',
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
+                        child: TextFormField(
+                          style: subheading1,
+                          controller: aadhar,
+                          keyboardType: TextInputType.number,
+                          validator: MinLengthValidator(12,errorText: "Please input correct aadhaar number"),
+                          decoration: InputDecoration(
+                            labelText: 'Aadhaar Number',
+                            hintText: "Please input your 12 digit Aadhaar Number (UID)",
+                            hintStyle: subheading1,
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 60),
+                        child: TextFormField(
+                          style: subheading1,
+                          controller: email,
+                          validator: MultiValidator(
+                              [
+                                EmailValidator(errorText: "Provide Email in correct format"),
+                                RequiredValidator(errorText: "Email is required field")
+                              ]
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'E-Mail',
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
+                        child: TextFormField(
+                          style: subheading1,
+                          controller: password,
+                          validator: MinLengthValidator(8,errorText: "Password cannot be less than 8 characters"),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.white),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white,width: 2.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.amber,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
-                    child: TextFormField(
-                      style: subheading,
-                      controller: age,
-                      validator: RequiredValidator(errorText: "Age is a required field"),
-                      decoration: InputDecoration(
-                        labelText: 'Age',
-                        labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                      ),
-                    ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                FlatButton(
+                  color: blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
-                    child: TextFormField(
-                      style: subheading,
-                      controller: aadhar,
-                      keyboardType: TextInputType.number,
-                      validator: MinLengthValidator(12,errorText: "Please input correct aadhaar number"),
-                      decoration: InputDecoration(
-                        labelText: 'Aadhaar Number',
-                        hintText: "Please input your 12 digit Aadhaar Number (UID)",
-                        hintStyle: subheading,
-                        labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                      ),
-                    ),
+                  onPressed: () async {
+                    if(key.currentState.validate()) {
+                      setState(() {
+                        loading = true;
+                      });
+                      addCostumer();
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text("SIGNUP",style: heading1),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 60),
-                    child: TextFormField(
-                      style: subheading,
-                      controller: email,
-                      validator: MultiValidator(
-                        [
-                          EmailValidator(errorText: "Provide Email in correct format"),
-                          RequiredValidator(errorText: "Email is required field")
-                        ]
-                      ),
-                      decoration: InputDecoration(
-                        labelText: 'E-Mail',
-                        labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                      ),
-                    ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text("Existing User? Log In Here!",style: subheading1),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
-                    child: TextFormField(
-                      style: subheading,
-                      controller: password,
-                      validator: MinLengthValidator(8,errorText: "Password cannot be less than 8 characters"),
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                  onTap: () async {
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                )
+              ],
             ),
-            SizedBox(
-              height: 30,
-            ),
-            FlatButton(
-              color: blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              onPressed: () async {
-                if(key.currentState.validate()) {
-                  setState(() {
-                    loading = true;
-                  });
-                  addCostumer();
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Text("SIGNUP",style: heading1),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GestureDetector(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text("Existing User? Log In Here!",style: subheading),
-              ),
-              onTap: () async {
-                Navigator.pop(context);
-              },
-            ),
-            SizedBox(
-              height: 30,
-            )
-          ],
-        ),
-      ),
+          ),
+        ],
+      )
     );
   }
 }

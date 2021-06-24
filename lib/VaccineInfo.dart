@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blockchain/MainPage.dart';
 import 'package:blockchain/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,8 +66,8 @@ class _VaccineInfo extends State<VaccineInfo>{
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(87, 114, 195,1),
+    return WillPopScope(child: Scaffold(
+      backgroundColor: primaryBlue,
       body: (loading)?Center(
         child: CircularProgressIndicator(),
       ):SingleChildScrollView(
@@ -82,9 +83,9 @@ class _VaccineInfo extends State<VaccineInfo>{
               height: MediaQuery.of(context).size.width-100,
               width: MediaQuery.of(context).size.width-100,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/vaccineInfobg.png"),
-                )
+                  image: DecorationImage(
+                    image: AssetImage("Assets/vaccineInfobg.png"),
+                  )
               ),
             ),
             Container(
@@ -99,25 +100,25 @@ class _VaccineInfo extends State<VaccineInfo>{
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                         Text("Temperature Control",style: subheading1,),
-                         RichText(
-                           textAlign: TextAlign.center,
-                           text: TextSpan(
-                             style: normal1,
-                             children: [
-                               TextSpan(
-                                 text: "A sensor attached to each vehicle shows this vaccine was maintained at ",
-                               ),
-                               TextSpan(
-                                 text: temp,
-                                 style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
-                               ),
-                               TextSpan(
-                                 text: " Temperature"
-                               )
-                             ]
-                           ),
-                         )
+                        Text("Temperature Control",style: subheading1,),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              style: normal1,
+                              children: [
+                                TextSpan(
+                                  text: "A sensor attached to each vehicle shows this vaccine was maintained at ",
+                                ),
+                                TextSpan(
+                                    text: temp,
+                                    style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
+                                ),
+                                TextSpan(
+                                    text: " Temperature"
+                                )
+                              ]
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -204,6 +205,9 @@ class _VaccineInfo extends State<VaccineInfo>{
           ],
         ),
       ),
-    );
+    ), onWillPop: (){
+      Navigator.popAndPushNamed(context,'/mainPage');
+      return Future.value(false);
+    });
   }
 }

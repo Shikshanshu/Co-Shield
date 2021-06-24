@@ -6,76 +6,69 @@ import '../theme.dart';
 
 
 
-Divider _buildDivider() {
-  return Divider(
-    color: Colors.grey.shade400,
-  );
-}
-
-Widget _buildRow(BuildContext context,IconData icon, String title,int index, {bool showBadge = false}) {
+Widget _buildRow(BuildContext context,IconData icon,int index,bool data,ValueChanged onClick){
 
   return GestureDetector(
     onTap: (){
-      Fluttertoast.showToast(msg: "Feature Available Soon",backgroundColor: Colors.green);
+      if(index==0)
+        onClick(true);
+      else if(index==1)
+        onClick(true);
+      else if(index==2)
+        onClick(true);
+      else
+        Fluttertoast.showToast(msg: "Feature Available Soon",backgroundColor: Colors.green);
     },
     child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(children: [
         Icon(
           icon,
-          color: Colors.grey,
-        ),
-        SizedBox(width: 10.0),
-        Text(
-          title,
-          style: subheading,
+          color: (!data)?primaryBlue:secondaryGreen,
+          size: 30,
         ),
       ]),
     ),
   );
 }
-buildDrawer(context){
-  return ClipPath(
-    clipper: OvalRightBorderClipper(),
-    child: Drawer(
-      child: Container(
-        padding: const EdgeInsets.only(left: 16.0, right: 40),
-        decoration: BoxDecoration(
-            color: Colors.white, boxShadow: [BoxShadow(color: Colors.black45)]),
-        width: 300,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 30,
+buildDrawer(context,selectedIndex,ValueChanged onChange){
+  return Scaffold(
+    body: Container(
+      padding: const EdgeInsets.only(left: 16.0, right: 40,top: 5,bottom: 5),
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 30,
+              ),
+              Center(
+                child: Column(
+                  children: <Widget>[
+                    _buildRow(context, Icons.account_circle_rounded,0,(selectedIndex==0),(data){
+                      if(data==true)
+                        onChange(0);
+                    }),
+                    _buildRow(context,Icons.verified,1,(selectedIndex==1),(data){
+                      if(data==true)
+                        onChange(1);
+                    }),
+                    _buildRow(context,Icons.agriculture_rounded,2,(selectedIndex==2),(data){
+                      if(data==true)
+                        onChange(2);
+                    }),
+                    _buildRow(context,Icons.share,3,(selectedIndex==3),(data){
+                    }),
+                    _buildRow(context,Icons.star,4,(selectedIndex==4),(data){
+                    }),
+                    _buildRow(context,Icons.info_outline,5,(selectedIndex==5),(data){
+                    }),
+                  ],
                 ),
-                Center(
-                  child: Container(
-                    height: 200,
-                    width: 200,
-                    alignment: Alignment.center,
-
-                  ),
-                ),
-                SizedBox(height: 5.0),
-                SizedBox(height: 70.0),
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      _buildRow(context,Icons.share, "Share App",1),
-                      _buildDivider(),
-                      //_buildRow(context,Icons.account_circle, "Edit Profile",2, showBadge: true),
-                      //_buildDivider(),
-                      _buildRow(context,Icons.star, "Rate Us",3,showBadge: true),
-                      _buildDivider(),
-                      _buildRow(context,Icons.info_outline,"Terms and Conditions",4),
-                      _buildDivider(),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

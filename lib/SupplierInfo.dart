@@ -63,103 +63,105 @@ class _SupplierInfo extends State<SupplierInfo>{
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 70,
-            ),
-            Text(company,style: heading,),
-            Padding(
-              padding: EdgeInsets.all(40),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.black),
-                  children: [
-                    TextSpan(
-                      text: "The company is registered to provide vaccine against COVID-19 as per government certification id ",
-                    ),
-                    TextSpan(
-                      text: companyData['government id'],
-                        style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
-                    ),
-                    TextSpan(
-                      text: " in ",
-                    ),
-                    TextSpan(
-                      text: companyData['location'],
-                        style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
-                    ),
-                    TextSpan(
-                      text: " supplied to them by company ",
-                    ),
-                    TextSpan(
-                        text: companyData['vaccine'],
-                        style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
-                    ),
-                    TextSpan(
-                      text: ". For further information please contact them at ",
-                    ),
-                    TextSpan(
-                      text: companyData['contact'],
-                        style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
-                    ),
-                  ]
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(company,style: heading,textAlign: TextAlign.center,),
+              Padding(
+                padding: EdgeInsets.all(40),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: "The company is registered to provide vaccine against COVID-19 as per government certification id ",
+                        ),
+                        TextSpan(
+                            text: companyData['government id'],
+                            style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
+                        ),
+                        TextSpan(
+                          text: " in ",
+                        ),
+                        TextSpan(
+                            text: companyData['location'],
+                            style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
+                        ),
+                        TextSpan(
+                          text: " supplied to them by company ",
+                        ),
+                        TextSpan(
+                            text: companyData['vaccine'],
+                            style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
+                        ),
+                        TextSpan(
+                          text: ". For further information please contact them at ",
+                        ),
+                        TextSpan(
+                            text: companyData['contact'],
+                            style: GoogleFonts.aBeeZee(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.amber)
+                        ),
+                      ]
+                  ),
                 ),
               ),
-            ),
-            Text("Customer Review",style: subheading),
-            Container(
-              height: 400,
-              padding: EdgeInsets.all(10),
-              child: BarChart(series,
-                animate: true,
-                animationDuration: Duration(seconds: 2),
-              ),
-            ),
-            Column(
-              children: data.map((e){
-                return Row(
-                  children: [
-                    SizedBox(width: MediaQuery.of(context).size.width/2-70),
-                    Container(
-                      height: 10,
-                      width: 10,
-                      decoration: BoxDecoration(
-                        color: e.color,
-                        shape: BoxShape.circle
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(e.data,style: normal,),
-                  ],
-                );
-              }).toList(),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            FlatButton(
-              color: Colors.amber,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              onPressed: (){
-                Fluttertoast.showToast(msg: "You have been successfully registered for a vaccine");
-              },
-              child: Padding(
+              Text("Customer Review",style: subheading),
+              Container(
+                height: 400,
                 padding: EdgeInsets.all(10),
-                child: Text("Register for vaccine",style: heading1),
+                child: BarChart(series,
+                  animate: true,
+                  animationDuration: Duration(seconds: 2),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+              Column(
+                children: data.map((e){
+                  return Row(
+                    children: [
+                      SizedBox(width: MediaQuery.of(context).size.width/2-70),
+                      Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                            color: e.color,
+                            shape: BoxShape.circle
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(e.data,style: normal,),
+                    ],
+                  );
+                }).toList(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              FlatButton(
+                color: Colors.amber,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                onPressed: (){
+                  Fluttertoast.showToast(msg: "You have been successfully registered for a vaccine");
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Register for vaccine",style: heading1),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -64,6 +64,10 @@ class _SplashScreen extends State<SplashScreen>{
         backgroundColor: Colors.white,
         body: Stack(
           children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+            ),
             SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,7 +81,7 @@ class _SplashScreen extends State<SplashScreen>{
                       width: 200,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage("Assets/initial.gif")
+                              image: AssetImage("Assets/initial.png")
                           )
                       ),
                     ),
@@ -88,7 +92,7 @@ class _SplashScreen extends State<SplashScreen>{
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: AnimatedOpacity(
-                      child: Text("Co-Shield",style: GoogleFonts.aBeeZee(fontSize: 50,fontWeight: FontWeight.w900,color: orange ),),
+                      child: Text("Co-Shield",style: GoogleFonts.aBeeZee(fontSize: 50,fontWeight: FontWeight.w900,color: primaryBlue),),
                       opacity: visibility1,
                       duration: Duration(milliseconds: 250),
                     )
@@ -96,52 +100,9 @@ class _SplashScreen extends State<SplashScreen>{
                   AnimatedOpacity(
                     opacity: visibility2,
                     duration: Duration(milliseconds: 250),
-                    child: Text("WE CARE FOR YOU",style: GoogleFonts.aBeeZee(fontStyle: FontStyle.italic,fontSize: 20,fontWeight: FontWeight.w500,color: blue),),
+                    child: Text("WE CARE FOR YOU",style: GoogleFonts.aBeeZee(fontStyle: FontStyle.italic,fontSize: 20,fontWeight: FontWeight.w500,color: secondaryGreen),),
                   ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: AnimatedOpacity(
-                      opacity: visible,
-                      duration: Duration(milliseconds: 1000),
-                      child: FlatButton(
-                        onPressed: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          (prefs.getString("supplier")!=null)?Navigator.push(context,MaterialPageRoute(builder: (context)=>sup.MainPage())):
-                          Navigator.push(context,MaterialPageRoute(builder: (context)=>supplier.Login()));
-                        },
-                        color: orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Text("SUPPLIER",style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 22),),
-                        ),
-                      ),
-                    ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: visible,
-                    duration: Duration(milliseconds: 1000),
-                    child: FlatButton(
-                      onPressed: () async {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        (prefs.getString("customer")!=null)?Navigator.push(context,MaterialPageRoute(builder: (context)=>MainPage())):
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
-                      },
-                      color: blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text("CONSUMER",style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 22),),
-                      ),
-                    ),
-                  )
+
                 ],
               ),
 
@@ -153,7 +114,7 @@ class _SplashScreen extends State<SplashScreen>{
               child: AnimatedContainer(
                 height: 50,
                 width: (selected)?0:MediaQuery.of(context).size.width-80,
-                color: orange,
+                color: primaryBlue,
                 duration: Duration(milliseconds: 250),
               ),
             ),
@@ -164,13 +125,101 @@ class _SplashScreen extends State<SplashScreen>{
               child: AnimatedContainer(
                 height: 50,
                 width: (selected2)?0:MediaQuery.of(context).size.width-80,
-                color: blue,
+                color: secondaryGreen,
                 duration: Duration(milliseconds: 250),
               ),
             ),
+            Positioned(
+              top: 400,
+              child: ClipPath(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height-400,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(33,147,176,1),
+                          Color.fromRGBO(109,213,237,1),
+                        ]
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                      ),
+                      AnimatedOpacity(opacity: visible, duration: Duration(milliseconds: 1000),child: Text("Get started as a :",style: heading1,),),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: AnimatedOpacity(
+                          opacity: visible,
+                          duration: Duration(milliseconds: 1000),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              (prefs.getString("supplier")!=null)?Navigator.push(context,MaterialPageRoute(builder: (context)=>sup.MainPage())):
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>supplier.Login()));
+                            },
+                            color: Colors.deepPurpleAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text("SUPPLIER",style: subheading1),
+                            ),
+                          ),
+                        ),
+                      ),
+                      AnimatedOpacity(
+                        opacity: visible,
+                        duration: Duration(milliseconds: 1000),
+                        child: RaisedButton(
+                          onPressed: () async {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            (prefs.getString("customer")!=null)?Navigator.push(context,MaterialPageRoute(builder: (context)=>MainPage())):
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
+                          },
+                          color: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text("CONSUMER",style: subheading1),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                clipper: BottomArc(),
+              )
+            )
           ],
         )
     );
   }
 
+}
+class BottomArc extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.quadraticBezierTo(
+        size.width*3 /4, 0, size.width/2, 100);
+    path.quadraticBezierTo(size.width/4,200,0,100);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
 }

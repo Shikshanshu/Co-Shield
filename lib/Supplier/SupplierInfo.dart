@@ -102,7 +102,7 @@ class _SupplierInfo extends State<SupplierInfo>{
         child: Column(
           children: [
             SizedBox(
-              height: 70,
+              height: 20,
             ),
             Text(company,style: heading,),
             Padding(
@@ -174,6 +174,9 @@ class _SupplierInfo extends State<SupplierInfo>{
                 );
               }).toList(),
             ),
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),

@@ -30,21 +30,35 @@ class _Transporter extends State<Transporter>{
                   margin: EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue.shade200
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(33,147,176,1),
+                          Color.fromRGBO(109,213,237,1),
+                        ]
+                    ),
                   ),
                   child: Column(
                     children: [
-                      Center(
-                        child: Icon(Icons.thermostat_rounded,color: Colors.blue,size: 60,),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("Assets/check.png"),
+                                fit: BoxFit.fill
+                            )
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text("TEMPERATURE CONTROL",style: subheading1,),
+                        child: Text("TEMPERATURE CONTROL",style: subheading2,),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text("Get the temperature maintained in the refrigerator storing the vaccine to avoid possible cold chain breach",style: normal1,textAlign: TextAlign.center,),
+                        child: Text("Get the temperature maintained in the refrigerator storing the vaccine to avoid possible cold chain breach",style: normal2,textAlign: TextAlign.center,),
                       ),
                     ],
                   ),
@@ -85,21 +99,35 @@ class _Transporter extends State<Transporter>{
                   margin: EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue.shade200
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(33,147,176,1),
+                          Color.fromRGBO(109,213,237,1),
+                        ]
+                    ),
                   ),
                   child: Column(
                     children: [
-                      Center(
-                        child: Icon(Icons.alt_route_rounded,color: Colors.blue,size: 60,),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("Assets/delivery.png"),
+                                fit: BoxFit.fill
+                            )
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text("CONJUNCTION IN ROUTE",style: subheading1,),
+                        child: Text("CONJUNCTION IN ROUTE",style: subheading2,),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text("Get real time traffic updates in your route with route optimizations for safe vaccine transport",style: normal1,textAlign: TextAlign.center,),
+                        child: Text("Get real time traffic updates in your route with route optimizations for safe vaccine transport",style: normal2,textAlign: TextAlign.center,),
                       ),
                     ],
                   ),
@@ -114,21 +142,35 @@ class _Transporter extends State<Transporter>{
                   margin: EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue.shade200
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(33,147,176,1),
+                          Color.fromRGBO(109,213,237,1),
+                        ]
+                    ),
                   ),
                   child: Column(
                     children: [
-                      Center(
-                        child: Icon(Icons.inventory,color: Colors.blue,size: 60,),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("Assets/stock.png"),
+                                fit: BoxFit.fill
+                            )
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text("INVENTORY MANAGEMENT",style: subheading1,),
+                        child: Text("INVENTORY MANAGEMENT",style: subheading2,),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text("Get to know how many vaccines are left in your inventory to avoid possible vaccine shortages",style: normal1,textAlign: TextAlign.center,),
+                        child: Text("Get to know how many vaccines are left in your inventory to avoid possible vaccine shortages",style: normal2,textAlign: TextAlign.center,),
                       ),
                     ],
                   ),
@@ -169,21 +211,35 @@ class _Transporter extends State<Transporter>{
                   margin: EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue.shade200
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(33,147,176,1),
+                          Color.fromRGBO(109,213,237,1),
+                        ]
+                    ),
                   ),
                   child: Column(
                     children: [
-                      Center(
-                        child: Icon(Icons.warning_rounded,color: Colors.blue,size: 60,),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("Assets/car.png"),
+                            fit: BoxFit.fill
+                          )
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text("VEHICLE FAILURE",style: subheading1,),
+                        child: Text("VEHICLE FAILURE",style: subheading2,),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text("Report of any possible vehicle failure so that we can redirect nearest transporter to you to avoid any damage to the vaccine",style: normal1,textAlign: TextAlign.center,),
+                        child: Text("Report of any possible vehicle failure so that we can redirect nearest transporter to you to avoid any damage to the vaccine",style: normal2,textAlign: TextAlign.center,),
                       ),
                     ],
                   ),

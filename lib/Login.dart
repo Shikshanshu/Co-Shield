@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,6 +47,8 @@ class _Login extends State<Login>{
       setState(() {
         loading = false;
       });
+      FirebaseAuth auth = FirebaseAuth.instance;
+      await auth.signInAnonymously();
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => IntroScreen()));
     }
@@ -60,165 +63,182 @@ class _Login extends State<Login>{
     return Scaffold(
       body: (loading)?Center(
         child: CircularProgressIndicator(),
-      ):SingleChildScrollView(
-        child: Column(
-            children: [
-              SizedBox(
-                height: 70,
-              ),
-              Text("LOGIN",style:  GoogleFonts.aBeeZee(fontSize: 50,fontWeight: FontWeight.w900,color: orange ),),
-              SizedBox(
-                height: 30,
-              ),
-              Form(
-                key: key,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 60),
-                      child: TextFormField(
-                        style: subheading,
-                        controller: email,
-                        validator: MultiValidator(
-                            [
-                              EmailValidator(errorText: "Provide Email in correct format"),
-                              RequiredValidator(errorText: "Email is required field")
-                            ]
-                        ),
-                        decoration: InputDecoration(
-                          labelText: 'E-Mail',
-                          labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                          enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey,width: 2),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.red,width: 2),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.red,width: 2),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
-                      child: TextFormField(
-                        style: subheading,
-                        controller: password,
-                        validator: MinLengthValidator(8,errorText: "Password cannot be less than 8 characters"),
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle:  GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.grey,width: 2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.grey,width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.red,width: 2),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.red,width: 2),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
-                      child: TextFormField(
-                        style: subheading,
-                        controller: aadhar,
-                        keyboardType: TextInputType.number,
-                        validator: MinLengthValidator(12,errorText: "Please input correct aadhaar number"),
-                        decoration: InputDecoration(
-                          labelText: 'Aadhaar Number',
-                          hintText: "Please input your 12 digit Aadhaar Number (UID)",
-                          hintStyle: subheading,
-                          labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.grey,width: 2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.grey,width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.red,width: 2),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.red,width: 2),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+      ):Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.width/1.25,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                      "Assets/login.png"
+                  ),
+                  fit: BoxFit.fill,
+                )
+            ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.width/1.25,
+                  child: Center(
+                    child: Text("LOGIN",style: GoogleFonts.aBeeZee(fontSize: 35,fontWeight: FontWeight.bold,color: Colors.white),),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              FlatButton(
-                color: blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
+                Form(
+                  key: key,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 60),
+                        child: TextFormField(
+                          style: subheading,
+                          controller: email,
+                          validator: MultiValidator(
+                              [
+                                EmailValidator(errorText: "Provide Email in correct format"),
+                                RequiredValidator(errorText: "Email is required field")
+                              ]
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'E-Mail',
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.grey,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.grey,width: 2),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.red,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.red,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
+                        child: TextFormField(
+                          style: subheading,
+                          controller: password,
+                          validator: MinLengthValidator(8,errorText: "Password cannot be less than 8 characters"),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle:  GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.grey,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.grey,width: 2.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.red,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.red,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 60.0),
+                        child: TextFormField(
+                          style: subheading,
+                          controller: aadhar,
+                          keyboardType: TextInputType.number,
+                          validator: MinLengthValidator(12,errorText: "Please input correct aadhaar number"),
+                          decoration: InputDecoration(
+                            labelText: 'Aadhaar Number',
+                            hintText: "Please input your 12 digit Aadhaar Number (UID)",
+                            hintStyle: subheading,
+                            labelStyle: GoogleFonts.aBeeZee(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.grey,width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.grey,width: 2.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.red,width: 2),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.red,width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                onPressed: () async {
-                  if(key.currentState.validate())
+                SizedBox(
+                  height: 30,
+                ),
+                FlatButton(
+                  color: blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  onPressed: () async {
+                    if(key.currentState.validate())
                     {
                       setState(() {
                         loading = true;
                       });
                       getCostumer();
                     }
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text("LOGIN",style: heading1),
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text("LOGIN",style: heading1),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text("New User? Sign Up Here!",style: subheading),
+                SizedBox(
+                  height: 10,
                 ),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text("Continue as guest?",style: subheading),
+                GestureDetector(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text("New User? Sign Up Here!",style: subheading),
+                  ),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUp()));
+                  },
                 ),
-                onTap: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('guest', true);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroScreen()));
-                },
-              ),
-            ],
-        ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text("Continue as guest?",style: subheading),
+                  ),
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('guest', true);
+                    FirebaseAuth auth = FirebaseAuth.instance;
+                    await auth.signInAnonymously();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroScreen()));
+                  },
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

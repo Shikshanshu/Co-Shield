@@ -52,7 +52,7 @@ class _AddVaccine extends State<AddVaccine>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(87, 114, 195,1),
+      backgroundColor: primaryBlue,
       body: (loading)?Center(
         child: CircularProgressIndicator(),
       ):SingleChildScrollView(
@@ -154,6 +154,9 @@ class _AddVaccine extends State<AddVaccine>{
                   if(prefs.getBool('guest'))
                     {
                       Fluttertoast.showToast(msg: "Cannot add Vaccine as guest");
+                      setState(() {
+                        loading=false;
+                      });
                     }
                   else
                     addVaccine();

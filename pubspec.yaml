@@ -40,11 +40,21 @@ dependencies:
   charts_flutter: ^0.9.0
   web3dart: ^1.2.3
   http: ^0.12.2
+  cloud_firestore: ^0.14.4
+  firebase_auth: ^0.18.4+1
+  firebase_core: ^0.5.3
+  file_picker: ^1.4.2
+  firebase_storage: ^5.0.1
+  table_calendar: ^2.3.3
+  flutter_launcher_icons: "^0.8.0"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "Assets/initial.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

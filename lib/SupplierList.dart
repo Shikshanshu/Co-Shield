@@ -22,33 +22,39 @@ class _SupplierList extends State<SupplierList>{
         suppliers = [
           {
             "id": "1",
-            "name": "Sun Pharmaceuticals",
-            "vaccine": "Phyzer"
+            "name": "Sun\nPharmaceuticals",
+            "vaccine": "Phyzer",
+            "logo": "vaccine"
           },
           {
             "id": "2",
-            "name": "Bharat BioTech",
-            "vaccine": "No Virus"
+            "name": "Bharat\nBioTech",
+            "vaccine": "No Virus",
+            "logo": "vaccine1"
           },
           {
             "id": "3",
-            "name": "Serum Institute",
-            "vaccine": "CoviShield"
+            "name": "Serum\nInstitute",
+            "vaccine": "CoviShield",
+            "logo": "vaccine2"
           },
           {
             "id": "4",
-            "name": "Zydus Cadila",
-            "vaccine": "GoCorona"
+            "name": "Zydus\nCadila",
+            "vaccine": "GoCorona",
+            "logo": "vaccine3"
           },
           {
             "id": "5",
-            "name": "Panacea Biotec",
-            "vaccine": "CoronaGo"
+            "name": "Panacea\nBiotec",
+            "vaccine": "CoronaGo",
+            "logo": "vaccine4"
           },
           {
             "id": "6",
-            "name": "Indian Immunologicals",
-            "vaccine": "Covaxin"
+            "name": "Indian\nImmunologicals",
+            "vaccine": "Covaxin",
+            "logo": "vaccine5"
           }
         ] ;
       }
@@ -69,7 +75,8 @@ class _SupplierList extends State<SupplierList>{
             suppliers.add({
               'id': json['id'],
               'name': json['name'],
-              'vaccine': json['vaccineName']
+              'vaccine': json['vaccineName'],
+              'logo': "vaccine"+(suppliers.length%6).toString(),
             });
           }
         }
@@ -94,19 +101,12 @@ class _SupplierList extends State<SupplierList>{
         child: Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height/6,
-            ),
-            Container(
-              height: 1,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.grey,
+              height: 30,
             ),
             SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+              child: Wrap(
                   children: suppliers.map((e){
-                    return MyTile(e,context);
+                    return newTile(e,context);
                   }).toList()
               ),
             )
@@ -134,6 +134,56 @@ class _SupplierList extends State<SupplierList>{
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>SupplierInfo(text)));
       },
+    );
+  }
+  Widget newTile(dynamic text,BuildContext context)
+  {
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SupplierInfo(text)));
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width/2-30,
+        height: 180,
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromRGBO(33,147,176,1),
+              Color.fromRGBO(109,213,237,1),
+            ]
+          ),
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("Assets/"+text["logo"]+".png"),
+                    fit: BoxFit.fill,
+                  )
+                ),
+              )
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Text(text['name'],textAlign: TextAlign.center,style: normal1,),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -16,14 +16,16 @@ class IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     data.add({
-      'title': "REDIFINE HEALTHCARE",
+      'title': "Yes to vaccine, Yes to caution",
       'path': 'Assets/intro1.png',
-      'description': "We bring to you redefined healthcare where going to hospital is no longer the need of the arch as you can get professional at the comfort of your home"
+      'image': null,
+      'description': "The vaccines are upto 91.6% effective, those are the odds to return to your normal life"
     });
     data.add({
-      'title': "VIRTUAL HEALTHCARE ASSISTANT",
+      'title': "Redefine HealthCare",
       'path': 'Assets/intro2.png',
-      'description': "To bring to you the latest technology we have self designed chat bot to help you know if you are suffering from any of the on going pandemics and also provide precautions you must follow"
+      'image': 'Assets/intro3.png',
+      'description': "We redefined healthcare using latest technologies to help users with live vaccine data, customer reviews, and performance report on vaccine suppliers and more"
     });
     super.initState();
   }
@@ -42,9 +44,6 @@ class IntroScreenState extends State<IntroScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 60,
-                  ),
                   Center(
                     child: Container(
                       child: Text(
@@ -58,13 +57,16 @@ class IntroScreenState extends State<IntroScreen> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(currentSlide['path'])
-                      )
+                  (currentSlide['image']==null)?Container():Center(
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width-50,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(currentSlide['image']),
+                              fit: BoxFit.fill
+                          )
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -99,14 +101,10 @@ class IntroScreenState extends State<IntroScreen> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color.fromRGBO(48,190,200,1),
-                    Color.fromRGBO(51,16,108,1)
-                  ]
-              ),
+                image: DecorationImage(
+                    image: AssetImage(data[selectedIndex]['path']),
+                    fit: BoxFit.fill
+                )
             ),
           ),
           CarouselSlider(
@@ -121,77 +119,38 @@ class IntroScreenState extends State<IntroScreen> {
             ),
             items: tabs,
           ),
-          Positioned(
-            bottom: 30,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: (selectedIndex!=data.length-1)?Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: FlatButton(
-                      child: Icon(Icons.skip_next,color: Colors.white,size: 32,),
-                      color: orange,
-                      onPressed: (){
-                        setState(() {
-                          selectedIndex=data.length-1;
-                          buttonCarouselController.jumpToPage(tabs.length-1);
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  Expanded(child: DotsIndicator(
-                    dotsCount: tabs.length,
-                    position: selectedIndex.toDouble(),
-                    decorator: DotsDecorator(
-                      color: Colors.deepOrangeAccent.shade100,
-                      activeColor: orange,
-                      size: const Size.square(9.0),
-                      activeSize: const Size(18.0, 9.0),
-                      activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                    ),
-                  )),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: FlatButton(
-                      child: Icon(Icons.arrow_forward,color: Colors.white,size: 32,),
-                      color: orange,
-                      onPressed: (){
-                        setState(() {
-                          selectedIndex++;
-                          buttonCarouselController.animateToPage(selectedIndex,duration: Duration(milliseconds: 300),curve: Curves.easeOut);
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ],
-              ):Row(
-                children: [
-                  Expanded(child: SizedBox()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: FlatButton(
-                      child: Icon(Icons.done,color: Colors.white,size: 32,),
-                      color: orange,
-                      onPressed: (){
-                        setState(() {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ],
+          (selectedIndex!=data.length-1)?Positioned(
+            top: 50,
+            right: 10,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: RaisedButton(
+                child: Text("SKIP",style: subheading1,),
+                color: Colors.deepPurpleAccent,
+                onPressed: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>MainPage()));
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
-            )
+            ),
+          ):Positioned(
+            top: 50,
+            right: 10,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: RaisedButton(
+                child: Text("DONE",style: subheading1,),
+                color: Colors.deepPurpleAccent,
+                onPressed: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>MainPage()));
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
           )
         ],
       ),
